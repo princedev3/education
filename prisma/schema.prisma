@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole{
+  ADMIN
+  USER
+}
+
+model User{
+  id       String   @id @default(cuid())
+  role UserRole @default(USER)
+  name String
+  img String
+  email String @unique
+  emailVerified         DateTime?
+  password String
+  subject Subject[]
+  taskAttempt TaskAttempt[]
+}
+model VerificationToken {
+  id      String   @id @default(uuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(uuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model Subject {
+    id       String   @id @default(cuid())
+    name     String   @unique
+    modules  Module[]
+    duration String
+    userId String
+    user User @relation(fields: [userId],references: [id])
+    desc String
+    coverImage String
+    images String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+     pdf Pdf[]
+  }
+
+model Pdf {
+  id          String   @id @default(uuid())
+  url         String
+  subjectId   String?
+  subject     Subject? @relation(fields: [subjectId], references: [id])
+  moduleId    String?
+  module      Module?  @relation(fields: [moduleId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([subjectId, moduleId]) 
+}
+  model Module {
+     id       String   @id @default(cuid())
+    name        String
+    description String
+    subjectId   String
+    images String[]
+    subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    tasks       Task[]
+    pdf Pdf[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+  }
+ 
+  model Task {
+     id       String   @id @default(cuid())
+    task      String
+    answer    String  
+    moduleId  String
+    option String[]
+    module    Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    taskAttempt TaskAttempt[]
+  }
+
+
+model TaskAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userAnswer String
+  isCorrect Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([userId, taskId])
+}
