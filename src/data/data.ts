@@ -151,3 +151,21 @@ export const modules = [
 //   category: string;
 //   img: string;
 // };
+
+export const navbarLink = [
+  {
+    id: "1",
+    name: "course",
+    path: "/course",
+  },
+  {
+    id: "2",
+    name: "contact us",
+    path: "/contact",
+  },
+  {
+    id: "3",
+    name: "about",
+    path: "/about",
+  },
+];

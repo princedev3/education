@@ -4,9 +4,11 @@ import { LoaderCircle, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { useUserStore } from "@/providers/user-session";
 const CreateSubject = () => {
   const [loading, setLoading] = useState(false);
   const state = useModalStore();
+  const session = useUserStore((state) => state.session);
 
   const isOpen = state.isOpen && state.type === "create-course";
   const handleCreateSubjectFunc = async (
@@ -34,6 +36,9 @@ const CreateSubject = () => {
     toast.error(data.message);
     setLoading(false);
   };
+  if (session?.user?.role !== "ADMIN") {
+    return null;
+  }
   return (
     <>
       <div

@@ -195,8 +195,8 @@ const page = () => {
             <span className="text-lg">Duration: {singleData?.duration} </span>
           </div>
           <div className="grid grid-flow-col gap-2 self-start justify-end">
-            {memoizedCreateModule}
-            {memoizedCreateTask}
+            {session?.user?.role === "ADMIN" && memoizedCreateModule}
+            {session?.user?.role === "ADMIN" && memoizedCreateTask}
           </div>
         </div>
         <div className="flex flex-wrap  gap-6 my-3  items-center">

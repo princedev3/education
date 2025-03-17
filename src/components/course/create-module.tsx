@@ -3,7 +3,6 @@ import { useModalStore } from "@/lib/modal-toggle";
 import { LoaderCircle, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
 import { useParams } from "next/navigation";
 
 const CreateModule = () => {

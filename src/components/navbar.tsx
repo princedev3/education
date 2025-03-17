@@ -6,27 +6,12 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { UserButton } from "./user/user-button";
+import { navbarLink } from "@/data/data";
 
 const Navbar = () => {
   // const { session } = useUserStore((state) => state);
   const [open, setOpen] = useState(false);
-  const navbarLink = [
-    {
-      id: "1",
-      name: "course",
-      path: "/course",
-    },
-    {
-      id: "2",
-      name: "contact us",
-      path: "/contact",
-    },
-    {
-      id: "3",
-      name: "about",
-      path: "/about",
-    },
-  ];
+
   const pathName = usePathname();
 
   return (
@@ -34,11 +19,11 @@ const Navbar = () => {
       <div className="h-[80px] grid grid-flow-col items-center justify-between ">
         <Link href={"/"} className="cursor-pointer">
           <Image
-            src={"/logoz.png"}
+            src={"/logo.svg"}
             alt=""
-            width={70}
-            height={70}
-            className="object-cover w-[70px] h-[70px]"
+            width={50}
+            height={50}
+            className="object-cover w-[50px] h-[50px]"
           />
         </Link>
         <div className="hidden md:flex justify-center items-center gap-5">
