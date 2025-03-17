@@ -14,125 +14,87 @@ import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
   return (
-    <div className="">
-      <div className="grid  gap-y-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="w-full grid ">
-          <div className="flex gap-2">
-            <Link href={"/"} className="cursor-pointer">
+    <div className="p-4">
+      <div className="grid gap-y-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Link href="/" className="cursor-pointer">
               <Image
-                src={"/logo.svg"}
-                alt=""
+                src="/logo.svg"
+                alt="Logo"
                 width={40}
                 height={40}
-                className="object-contain w-[40px] h-[40px]"
+                className="object-contain w-10 h-10"
               />
             </Link>
-            <span className="text-gray-700 text-sm w-full">
+            <p className="text-gray-700 text-sm leading-relaxed">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem
               minus asperiores laboriosam commodi sint excepturi officia
               consequuntur optio. Dicta, saepe?
-            </span>
+            </p>
           </div>
-          <div className="flex items-center gap-5">
-            <a href="#">
-              <div className="w-7 h-7 rounded-full border flex items-center border-gray-300 hover:bg-gray-100 justify-center">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Instagram size={18} className="text-gray-500" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>instagram</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </a>
-            <a href="#">
-              <div className="w-7 h-7 rounded-full border flex items-center border-gray-300 hover:bg-gray-100 justify-center">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Linkedin size={18} className="text-gray-500" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Linkedin</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </a>
-            <a href="#">
-              <div className="w-7 h-7 rounded-full border flex items-center border-gray-300 hover:bg-gray-100 justify-center">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Mail size={18} className="text-gray-500" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>gmail</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </a>
-            <a href="#">
-              <div className="w-7 h-7 rounded-full border flex items-center border-gray-300 hover:bg-gray-100 justify-center">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Facebook size={18} className="text-gray-500" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Facebook</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div className="grid md:justify-center">
-          <h1 className="text-xl capitalize font-semibold text-gray-700">
-            Links
-          </h1>
-          <div className="grid gap-y-4">
-            {navbarLink.map((item) => (
-              <Link
-                key={item.id}
-                className={`
-                text-sm cursor-pointer capitalize  text-gray-600`}
-                href={item.path}
-              >
-                {item.name}{" "}
-              </Link>
+          <div className="flex gap-3">
+            {[
+              { icon: <Instagram size={18} />, label: "Instagram" },
+              { icon: <Linkedin size={18} />, label: "LinkedIn" },
+              { icon: <Mail size={18} />, label: "Email" },
+              { icon: <Facebook size={18} />, label: "Facebook" },
+            ].map((item, index) => (
+              <TooltipProvider key={index}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-gray-500 hover:bg-gray-100 cursor-pointer">
+                      {item.icon}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{item.label}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ))}
           </div>
         </div>
-        <div className="grid gap-y-2">
-          <span className="text-xl capitalize font-semibold text-gray-700">
-            {" "}
-            sign up for emails
-          </span>
-          <span className="text-sm text-gray-700">
-            get education alert any time. and free update directly into your
-            email. sign up
-          </span>
-          <form action="" className="grid grid-cols-[auto_100px] gap-4 ">
+
+        <div className="grid gap-2 md:justify-center">
+          <h1 className="text-xl font-semibold text-gray-700">Links</h1>
+          <nav className="grid gap-2">
+            {navbarLink.map((item) => (
+              <Link
+                key={item.id}
+                href={item.path}
+                className="text-sm text-gray-600 capitalize hover:text-gray-900"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="grid gap-2">
+          <h1 className="text-xl font-semibold text-gray-700">
+            Sign up for emails
+          </h1>
+          <p className="text-sm text-gray-700">
+            Get education alerts and free updates directly to your email.
+          </p>
+          <form className="flex gap-3">
             <input
               type="email"
-              className="border outline-none w-full h-full rounded-lg p-1"
+              placeholder="Enter your email"
+              className="border p-2 rounded-lg outline-none flex-grow"
             />
-            <button className="bg-[#1e81b0] text-white capitalize rounded-lg ">
-              sign up{" "}
+            <button className="bg-[#1e81b0] text-white px-4 py-2 rounded-lg capitalize hover:bg-[#166590]">
+              Sign Up
             </button>
           </form>
         </div>
       </div>
-      <Separator className="my-3 mt-4" />
 
-      <div className="flex items-center justify-center text-sm text-gray-700">
-        Education at its best <p>&copy; 2025 </p>
+      <Separator className="my-4" />
+
+      <div className="flex justify-center text-sm text-gray-700">
+        <p>Education at its best &copy; 2025</p>
       </div>
     </div>
   );
