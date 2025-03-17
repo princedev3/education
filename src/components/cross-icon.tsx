@@ -12,7 +12,6 @@ const CrossIcon = () => (
     strokeLinejoin="round"
     className="w-6 h-6"
   >
-    {/* First Stroke */}
     <motion.line
       x1="6"
       y1="6"
@@ -22,7 +21,7 @@ const CrossIcon = () => (
       animate={{ pathLength: 1 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     />
-    {/* Second Stroke */}
+
     <motion.line
       x1="18"
       y1="6"

@@ -11,7 +11,6 @@ const CheckIcon = () => (
     strokeLinejoin="round"
     className="w-6 h-6"
   >
-    {/* First Stroke (Upward) */}
     <motion.line
       x1="5"
       y1="12"
@@ -21,7 +20,7 @@ const CheckIcon = () => (
       animate={{ pathLength: 1 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     />
-    {/* Second Stroke (Downward) */}
+
     <motion.line
       x1="10"
       y1="17"

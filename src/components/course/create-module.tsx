@@ -47,13 +47,13 @@ const CreateModule = () => {
         create module
       </div>
       {isOpen && (
-        <div className="w-full z-50 h-screen fixed left-0 top-0 bg-black/50 p-16 motion-preset-expand duration-1000">
+        <div className="w-full z-50 h-screen fixed left-0 top-0 bg-black/50 p-3 lg:p-16 motion-preset-expand duration-1000">
           <motion.div
             initial={{ scale: 0.4, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.4, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-white min-h-full w-full rounded-3xl p-4 flex flex-col gap-3"
+            className="bg-white min-h-full w-full rounded-3xl max-w-5xl mx-auto  p-4 flex flex-col gap-3"
           >
             <div className="justify-end flex">
               <X
