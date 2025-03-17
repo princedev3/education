@@ -62,7 +62,7 @@ const UserLogin = () => {
     setLoadingPassword(false);
   };
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen w-full">
       <div className="max-w-4xl w-full grid h-full  mx-auto shadow rounded-2xl p-3 md:p-7 ">
         <Image
           src={"/logo.svg"}

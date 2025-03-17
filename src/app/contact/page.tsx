@@ -35,7 +35,7 @@ const Contact = () => {
     setLoading(false);
   }
   return (
-    <div className=" mb-3">
+    <div className="w-full mb-3">
       <div className="w-full max-w-3xl mx-auto grid gap-y-4">
         <div className="grid gap-y-1 mb-3">
           <h1 className="text-center text-2xl md:text-4xl font-bold capitalize text-slate-800">
@@ -47,7 +47,7 @@ const Contact = () => {
         </div>
         <div className="mb-[50px] ">
           <form onSubmit={handleSubmit} className="w-full grid gap-y-6">
-            <div className="w-full grid mx-auto grid-flow-col gap-6">
+            <div className="w-full grid mx-auto md:grid-flow-col gap-4">
               <div className="grid gap-y-2">
                 <label htmlFor="" className="text-slate-700 text-xl">
                   Email
@@ -99,51 +99,46 @@ const Contact = () => {
           </form>
         </div>
       </div>
-      <div className="md:h-[200px] gap-10 md:grid-flow-col grid auto-cols-max items-center justify-center md:justify-between md:bg-slate-800 relative">
-        <div className="w-[180px] h-[180px]  md:absolute md:-top-10 md:left-[10%] flex items-center flex-col justify-center ">
-          <div className="w-[130px] h-[130px] bg-[#EA6D27]   flex items-center justify-center rounded-full">
-            <Accessibility
-              className="font-semibold text-4xl text-white"
-              size={90}
-            />
+      <div className="relative md:h-[250px] gap-10 grid md:grid-flow-col auto-cols-max items-center justify-center md:justify-between bg-slate-800 p-6 md:p-10 rounded-2xl shadow-lg">
+        <div className="flex flex-col items-center justify-center md:absolute md:-top-10 md:left-[10%] gap-3">
+          <div className="w-[130px] h-[130px] bg-[#EA6D27] flex items-center justify-center rounded-full shadow-md">
+            <Accessibility size={70} className="text-white" />
           </div>
           <Link
-            href={"/about"}
-            className="text-lg font-semibold md:text-white text-slate-800 "
+            href="/about"
+            className="text-lg font-semibold text-white hover:underline"
           >
             About Restur
           </Link>
         </div>
-        <div className="w-[180px] h-[180px]  md:absolute md:-top-10 md:left-[58%] md:-translate-x-full flex items-center flex-col justify-center ">
-          <div className="min-w-[130px] min-h-[130px] bg-[#EA6D27]   flex items-center justify-center rounded-full">
-            <Phone className="font-semibold text-4xl text-white" size={70} />
+
+        <div className="flex flex-col items-center justify-center md:absolute md:-top-12 md:left-[50%] transform md:-translate-x-1/2 gap-2">
+          <div className="w-[130px] h-[130px] bg-[#EA6D27] flex items-center justify-center rounded-full shadow-md">
+            <Phone size={60} className="text-white" />
           </div>
-          <h1 className=" font-semibold md:text-white text-slate-800">
-            Phone (Landline)
-          </h1>
+          <h2 className="text-lg font-semibold text-white">Contact Us</h2>
           <a
             href="tel:+35853157776"
-            className="text-sm  md:text-white text-slate-800"
+            className="text-sm text-white hover:underline"
           >
             +35853157776
           </a>
           <a
             href="mailto:marvinprince232@gmail.com"
-            className="text-sm  md:text-white text-slate-800"
+            className="text-sm text-white hover:underline"
           >
             marvinprince232@gmail.com
           </a>
         </div>
-        <div className="w-[180px] h-[180px]  md:absolute md:-top-10 md:right-[10%]  flex items-center flex-col justify-center ">
-          <div className="w-[130px] h-[130px] bg-[#EA6D27]   flex items-center justify-center rounded-full">
-            <MapPin className="font-semibold text-4xl text-white" size={70} />
+
+        <div className="flex flex-col items-center justify-center md:absolute md:-top-10 md:right-[10%] gap-3">
+          <div className="w-[130px] h-[130px] bg-[#EA6D27] flex items-center justify-center rounded-full shadow-md">
+            <MapPin size={60} className="text-white" />
           </div>
-          <h1 className=" font-semibold md:text-white text-slate-800">
+          <h2 className="text-lg font-semibold text-white">
             Our Office Location
-          </h1>
-          <span className="text-sm  md:text-white text-slate-800">
-            Finland Kuopio, Keskusta
-          </span>
+          </h2>
+          <span className="text-sm text-white">Finland, Kuopio, Keskusta</span>
         </div>
       </div>
     </div>

@@ -5,12 +5,17 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/providers/user-session";
+import RichTextEditor from "../rich-text-editor";
 const CreateSubject = () => {
   const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState("");
   const state = useModalStore();
   const session = useUserStore((state) => state.session);
 
   const isOpen = state.isOpen && state.type === "create-course";
+  const handleDesc = (e: string) => {
+    setDescription(e);
+  };
   const handleCreateSubjectFunc = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -18,6 +23,7 @@ const CreateSubject = () => {
     setLoading(true);
     const target = e.target as HTMLFormElement;
     const formdata = new FormData(target);
+    formdata.append("description", description);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_FETCH_URL}/subject/create-subject`,
       {
@@ -39,6 +45,7 @@ const CreateSubject = () => {
   if (session?.user?.role !== "ADMIN") {
     return null;
   }
+
   return (
     <>
       <div
@@ -54,7 +61,7 @@ const CreateSubject = () => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.4, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-white min-h-full w-full max-w-5xl mx-auto rounded-3xl p-4 flex flex-col gap-3"
+            className="bg-white h-full w-full max-w-5xl mx-auto rounded-3xl p-4 flex flex-col gap-3 "
           >
             <div className="justify-end flex">
               <X
@@ -64,67 +71,78 @@ const CreateSubject = () => {
                 size={40}
               />
             </div>
-            <form onSubmit={handleCreateSubjectFunc} className="grid gap-y-7">
+            <form
+              onSubmit={handleCreateSubjectFunc}
+              className="grid gap-y-7 h-full overflow-y-auto custom-scroll-bar pr-6"
+            >
               <h1 className="text-center text-2xl font-medium capitalize">
                 create subject
               </h1>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    subject
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="enter subject name"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
+              <div className="grid  gap-7">
+                <div className="w-full grid">
+                  <div className="grid gap-y-2">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      subject
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="enter subject name"
+                      className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
+                  <div className="grid gap-y-2">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      description
+                    </label>
+                    <RichTextEditor
+                      content={description}
+                      handleDesc={handleDesc}
+                    />
+                    {/* <input
+                      type="text"
+                      name="desc"
+                      placeholder="enter description"
+                      className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    /> */}
+                  </div>
                 </div>
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    description
-                  </label>
-                  <input
-                    type="text"
-                    name="desc"
-                    placeholder="enter description"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
-                </div>
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    duration
-                  </label>
-                  <input
-                    type="number"
-                    name="duration"
-                    placeholder="enter duration"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
-                </div>
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    cover image
-                  </label>
-                  <input
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    multiple
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
-                </div>
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    add pdf
-                  </label>
-                  <input
-                    type="file"
-                    name="pdf"
-                    multiple
-                    accept="application/pdf"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                  <div className="grid gap-y-2">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      duration
+                    </label>
+                    <input
+                      type="number"
+                      name="duration"
+                      placeholder="enter duration"
+                      className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
+                  <div className="grid gap-y-2">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      cover image
+                    </label>
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      multiple
+                      className="border outline-none w-full p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
+                  <div className="grid gap-y-2">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      add pdf
+                    </label>
+                    <input
+                      type="file"
+                      name="pdf"
+                      multiple
+                      accept="application/pdf"
+                      className="border outline-none p-2 w-full placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
                 </div>
               </div>
               <button

@@ -199,145 +199,104 @@ const page = () => {
       <div className="my-3">
         <div className="grid grid-flow-col">
           <div className="grid gap-2">
-            <h1 className="text-3xl">{singleData?.name} </h1>
-            <span className="text-lg">{singleData?.desc} </span>
-            <span className="text-lg">Duration: {singleData?.duration} </span>
+            <h1 className="text-3xl font-semibold">{singleData?.name}</h1>
+            <p className="text-lg text-gray-700">{singleData?.desc}</p>
+            <span className="text-lg text-gray-500">
+              Duration: {singleData?.duration}
+            </span>
           </div>
-          <div className="grid grid-flow-col gap-2 self-start justify-end">
+          <div className="grid md:grid-flow-col gap-2 self-start justify-end">
             {session?.user?.role === "ADMIN" && memoizedCreateModule}
             {session?.user?.role === "ADMIN" && memoizedCreateTask}
           </div>
         </div>
-        <div className="flex flex-wrap  gap-6 my-3  items-center">
-          {singleData?.images.map((item, index) => (
-            <>
-              <ShowImage item={item} index={index} key={item} />
-            </>
+        <div className="flex flex-wrap gap-6 my-4 items-center">
+          {singleData?.images?.map((item, index) => (
+            <ShowImage item={item} index={index} key={item} />
           ))}
         </div>
         <div className="grid gap-2">
-          {singleData?.pdf.map((item, index) => (
-            <>
-              <ShowPdf key={item.id} item={item.url} index={index} />
-            </>
+          {singleData?.pdf?.map((item, index) => (
+            <ShowPdf key={item.id} item={item.url} index={index} />
           ))}
         </div>
       </div>
-      <Accordion type="single" collapsible className="w-full">
-        {singleData?.modules &&
-          singleData?.modules.map((item, index) => {
-            return (
-              <AccordionItem key={item.id} value={item.name}>
-                <AccordionTrigger className="">
-                  <div className="">
-                    <span className="text-xl font-medium capitalize">
-                      {" "}
-                      Module {index + 1}
-                    </span>
-                    :{" "}
-                    <span className="text-gray-600 text-xl capitalize">
-                      {item.name}
-                    </span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="">
-                    <span className="text-lg text-gray-700">
-                      {item.description}{" "}
-                    </span>
-                    <div className="flex flex-wrap my-2 gap-6 items-center">
-                      {item?.images.map((item, index) => (
-                        <>
-                          <ShowImage item={item} index={index} key={item} />
-                        </>
-                      ))}
-                    </div>
-                    <div className="grid gap-2 my-2">
-                      {item?.pdf.map((item, index) => (
-                        <>
-                          <ShowPdf
-                            key={item.id}
-                            item={item.url}
-                            index={index}
-                          />
-                        </>
-                      ))}
-                    </div>
-                    <div className="">
-                      <div className="flex flex-col gap-3">
-                        {item?.tasks &&
-                          item?.tasks.map((item) => {
-                            const taskId = item.id;
-                            const isAttempted = attempts[taskId] !== undefined;
-                            const isCorrect = attempts[taskId];
-                            return (
-                              <div
-                                key={item.id}
-                                className="flex flex-col  gap-[6px] "
-                              >
-                                <span key={item.task} className=" md:text-xl">
-                                  {item.task}{" "}
-                                </span>
-                                <form
-                                  onSubmit={(e) => handleSubmit(e, item.id)}
-                                  className="flex gap-4 items-center"
-                                >
-                                  <Select required name="useranswer">
-                                    <SelectTrigger
-                                      name="useranswer"
-                                      className="py-5 rounded-2xl w-[200px] "
-                                    >
-                                      <SelectValue placeholder="Select a subject" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectGroup>
-                                        <SelectLabel>select answer</SelectLabel>
-                                        {item.option.length &&
-                                          item.option.map((item) => (
-                                            <SelectItem key={item} value={item}>
-                                              {item}{" "}
-                                            </SelectItem>
-                                          ))}
-                                      </SelectGroup>
-                                    </SelectContent>
-                                  </Select>
 
-                                  <button
-                                    disabled={
-                                      isAttempted ||
-                                      submittingTaskId === item.id
-                                    }
-                                    type="submit"
-                                    className="min-w-[100px] h-full disabled:cursor-not-allowed rounded-lg px-4 py-2 bg-blue-500 text-white flex items-center justify-center"
-                                  >
-                                    {submittingTaskId === item.id ? (
-                                      <Loader
-                                        size={25}
-                                        className="animate-spin duration-150"
-                                      />
-                                    ) : isAttempted ? (
-                                      "Attempted"
-                                    ) : (
-                                      "Submit"
-                                    )}
-                                  </button>
-                                  {attempts[item.id] !== undefined &&
-                                    (attempts[item.id] ? (
-                                      <CheckIcon />
-                                    ) : (
-                                      <CrossIcon />
-                                    ))}
-                                </form>
-                              </div>
-                            );
-                          })}
-                      </div>
+      <Accordion type="single" collapsible className="w-full">
+        {singleData?.modules?.map((module, index) => (
+          <AccordionItem key={module.id} value={module.name}>
+            <AccordionTrigger>
+              <div className="text-xl font-medium capitalize">
+                Module {index + 1}:{" "}
+                <span className="text-gray-600">{module.name}</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="text-lg text-gray-700 mb-4">
+                {module.description}
+              </div>
+              <div className="flex flex-wrap my-2 gap-6 items-center">
+                {module?.images?.map((img, idx) => (
+                  <ShowImage item={img} index={idx} key={img} />
+                ))}
+              </div>
+              <div className="grid gap-2 my-2">
+                {module?.pdf?.map((pdf, idx) => (
+                  <ShowPdf key={pdf.id} item={pdf.url} index={idx} />
+                ))}
+              </div>
+              <div className="flex flex-col gap-3">
+                {module?.tasks?.map((task) => {
+                  const isAttempted = attempts[task.id] !== undefined;
+                  const isCorrect = attempts[task.id];
+
+                  return (
+                    <div key={task.id} className="flex flex-col gap-2">
+                      <span className="text-lg">{task.task}</span>
+                      <form
+                        onSubmit={(e) => handleSubmit(e, task.id)}
+                        className="flex gap-4 items-center"
+                      >
+                        <Select required name="useranswer">
+                          <SelectTrigger className="py-2 px-4 border rounded-md">
+                            <SelectValue placeholder="Select an answer" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Choose Answer</SelectLabel>
+                              {task.option.map((opt) => (
+                                <SelectItem key={opt} value={opt}>
+                                  {opt}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+
+                        <button
+                          disabled={isAttempted || submittingTaskId === task.id}
+                          type="submit"
+                          className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-400"
+                        >
+                          {submittingTaskId === task.id ? (
+                            <Loader size={25} className="animate-spin" />
+                          ) : isAttempted ? (
+                            "Attempted"
+                          ) : (
+                            "Submit"
+                          )}
+                        </button>
+
+                        {attempts[task.id] !== undefined &&
+                          (isCorrect ? <CheckIcon /> : <CrossIcon />)}
+                      </form>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+                  );
+                })}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
       </Accordion>
     </div>
   );
