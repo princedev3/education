@@ -1,5 +1,5 @@
 "use client";
-import { LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 const ForgotPasswords = () => {
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token") as string;
@@ -43,11 +44,11 @@ const ForgotPasswords = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="max-w-3xl w-full grid h-full  mx-auto shadow rounded-2xl p-7 ">
         <Image
-          src={"/logoz.png"}
+          src={"/logo.svg"}
           alt=""
-          width={50}
-          height={50}
-          className="w-[50px] h-[50px] object-cover mx-auto mb-4 "
+          width={40}
+          height={40}
+          className="w-[40px] h-[40px] object-cover mx-auto mb-4 "
         />
         <form onSubmit={handleReset} action="" className="flex flex-col gap-7">
           <div className="flex flex-col gap-3">
@@ -57,13 +58,24 @@ const ForgotPasswords = () => {
             >
               New Password
             </label>
-            <input
-              type="text"
-              name="password"
-              required
-              placeholder="Enter your new password"
-              className="p-2 outline-none border rounded-2xl text-gray-800"
-            />
+            <div className="relative w-full ">
+              <input
+                type={showPassword ? "password" : "text"}
+                name="password"
+                className="p-2 outline-none border w-full rounded-2xl text-gray-800"
+              />
+              {showPassword ? (
+                <Eye
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 bottom-[50%] translate-y-[50%] text-gray-600 cursor-pointer "
+                />
+              ) : (
+                <EyeOff
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 bottom-[50%] translate-y-[50%] text-gray-600 cursor-pointer "
+                />
+              )}
+            </div>
           </div>
 
           <div className="grid">

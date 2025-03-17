@@ -1,5 +1,5 @@
 "use client";
-import { LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 const UserLogin = () => {
   const [verifyEmail, setVerifyEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(true);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingPassword, setLoadingPassword] = useState(false);
@@ -64,11 +65,11 @@ const UserLogin = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="max-w-4xl w-full grid h-full  mx-auto shadow rounded-2xl p-3 md:p-7 ">
         <Image
-          src={"/logoz.png"}
+          src={"/logo.svg"}
           alt=""
-          width={50}
-          height={50}
-          className="w-[50px] h-[50px] object-cover mx-auto mb-4 "
+          width={40}
+          height={40}
+          className="w-[40px] h-[40px] object-cover mx-auto mb-4 "
         />
         <form action="" onSubmit={handleLogin} className="flex flex-col gap-7">
           <div className="flex flex-col gap-3">
@@ -92,12 +93,25 @@ const UserLogin = () => {
             >
               Password
             </label>
-            <div className="w-full flex flex-col">
-              <input
-                type="password"
-                name="password"
-                className="p-2 outline-none border rounded-2xl text-gray-800"
-              />
+            <div className="w-full flex flex-col  ">
+              <div className="relative w-full ">
+                <input
+                  type={showPassword ? "password" : "text"}
+                  name="password"
+                  className="p-2 outline-none border w-full rounded-2xl text-gray-800"
+                />
+                {showPassword ? (
+                  <Eye
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 bottom-[50%] translate-y-[50%] text-gray-600 cursor-pointer "
+                  />
+                ) : (
+                  <EyeOff
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 bottom-[50%] translate-y-[50%] text-gray-600 cursor-pointer "
+                  />
+                )}
+              </div>
               <span
                 onClick={() => setOpen(!open)}
                 className="text-gray-800 cursor-pointer"

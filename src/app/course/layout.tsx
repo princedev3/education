@@ -46,10 +46,10 @@ export default function CourseLayout({
         style={backgroundStyles}
         className="h-[250px] relative before:absolute before:inset-0 before:bg-blue-900/50 flex items-center justify-center"
       >
-        <h1 className="text-2xl my-2 text-white z-50 font-semibold">
-          <span className="text-4xl">W</span>e prioritize your education, as we
-          aim in providing you first-class quality learning materials and
-          techniques.
+        <h1 className=" md:text-2xl my-2 text-white z-50 font-semibold">
+          <span className="text-2xl md:text-4xl">W</span>e prioritize your
+          education, as we aim in providing you first-class quality learning
+          materials and techniques.
         </h1>
 
         <div className="absolute bottom-4 right-4 grid grid-flow-col gap-3 auto-cols-max">

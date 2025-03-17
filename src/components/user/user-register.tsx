@@ -1,5 +1,5 @@
 "use client";
-import { LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 
 const UserRegister = () => {
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,11 +32,11 @@ const UserRegister = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="max-w-3xl w-full grid h-full  mx-auto shadow rounded-2xl p-7 ">
         <Image
-          src={"/logoz.png"}
+          src={"/logo.svg"}
           alt=""
-          width={50}
-          height={50}
-          className="w-[50px] h-[50px] object-cover mx-auto mb-4 "
+          width={40}
+          height={40}
+          className="w-[40px] h-[40px] object-cover mx-auto mb-4 "
         />
         <form
           action=""
@@ -79,14 +80,24 @@ const UserRegister = () => {
             >
               Password
             </label>
-            <div className="w-full flex flex-col">
+
+            <div className="relative w-full ">
               <input
-                type="password"
+                type={showPassword ? "password" : "text"}
                 name="password"
-                minLength={5}
-                required
-                className="p-2 outline-none border rounded-2xl text-gray-800"
+                className="p-2 outline-none border w-full rounded-2xl text-gray-800"
               />
+              {showPassword ? (
+                <Eye
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 bottom-[50%] translate-y-[50%] text-gray-600 cursor-pointer "
+                />
+              ) : (
+                <EyeOff
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 bottom-[50%] translate-y-[50%] text-gray-600 cursor-pointer "
+                />
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-3">

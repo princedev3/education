@@ -24,6 +24,10 @@ import ShowPdf from "@/components/course/show-pdf";
 import CreateModule from "@/components/course/create-module";
 import CreateTask from "@/components/course/create-task";
 import { useUserStore } from "@/providers/user-session";
+import { Loader } from "lucide-react";
+import { motion } from "framer-motion";
+import CrossIcon from "@/components/cross-icon";
+import CheckIcon from "@/components/check-icon";
 
 interface moduleType extends Module {
   tasks: Task[];
@@ -41,6 +45,7 @@ const page = () => {
   const id = params.id as string;
   const session = useUserStore((state) => state.session);
   const [loading, setLoading] = useState(false);
+  const [submittingTaskId, setSubmittingTaskId] = useState<string | null>("");
   const [attempts, setAttempts] = useState<{ [key: string]: boolean }>({});
   const [singleData, setSingleData] = useState<courseArrayType | null>(null);
   const memoizedCreateModule = useMemo(() => <CreateModule />, []);
@@ -115,6 +120,7 @@ const page = () => {
   ) => {
     try {
       e.preventDefault();
+      setSubmittingTaskId(taskId);
       const formdata = new FormData(e.target as HTMLFormElement);
       const userValue = formdata.get("useranswer");
 
@@ -156,9 +162,12 @@ const page = () => {
             })),
           };
         });
+        setSubmittingTaskId(null);
       }
+      setSubmittingTaskId(null);
     } catch (error) {
       console.log(error);
+      setSubmittingTaskId(null);
     }
   };
 
@@ -257,21 +266,21 @@ const page = () => {
                     <div className="">
                       <div className="flex flex-col gap-3">
                         {item?.tasks &&
-                          item?.tasks.map((item, taskIndex) => {
+                          item?.tasks.map((item) => {
                             const taskId = item.id;
                             const isAttempted = attempts[taskId] !== undefined;
                             const isCorrect = attempts[taskId];
                             return (
                               <div
                                 key={item.id}
-                                className="flex gap-6 items-center"
+                                className="flex flex-col  gap-[6px] "
                               >
-                                <span key={item.task} className="text-xl">
+                                <span key={item.task} className=" md:text-xl">
                                   {item.task}{" "}
                                 </span>
                                 <form
                                   onSubmit={(e) => handleSubmit(e, item.id)}
-                                  className="flex items-center"
+                                  className="flex gap-4 items-center"
                                 >
                                   <Select required name="useranswer">
                                     <SelectTrigger
@@ -294,25 +303,30 @@ const page = () => {
                                   </Select>
 
                                   <button
-                                    disabled={isAttempted}
+                                    disabled={
+                                      isAttempted ||
+                                      submittingTaskId === item.id
+                                    }
                                     type="submit"
-                                    className="ml-4 disabled:cursor-not-allowed rounded-lg px-4 py-2 bg-blue-500 text-white"
+                                    className="min-w-[100px] h-full disabled:cursor-not-allowed rounded-lg px-4 py-2 bg-blue-500 text-white flex items-center justify-center"
                                   >
-                                    {isAttempted ? "Attempted" : "Submit"}
+                                    {submittingTaskId === item.id ? (
+                                      <Loader
+                                        size={25}
+                                        className="animate-spin duration-150"
+                                      />
+                                    ) : isAttempted ? (
+                                      "Attempted"
+                                    ) : (
+                                      "Submit"
+                                    )}
                                   </button>
-                                  {attempts[item.id] !== undefined && (
-                                    <span
-                                      className={
-                                        attempts[item.id]
-                                          ? "text-green-500"
-                                          : "text-red-500"
-                                      }
-                                    >
-                                      {attempts[item.id]
-                                        ? "✅ Passed"
-                                        : "❌ Failed"}
-                                    </span>
-                                  )}
+                                  {attempts[item.id] !== undefined &&
+                                    (attempts[item.id] ? (
+                                      <CheckIcon />
+                                    ) : (
+                                      <CrossIcon />
+                                    ))}
                                 </form>
                               </div>
                             );
