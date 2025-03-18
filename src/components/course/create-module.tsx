@@ -4,21 +4,28 @@ import { LoaderCircle, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
+import RichTextEditor from "../rich-text-editor";
+import { Module } from "@prisma/client";
+import { courseArrayType } from "@/app/course/[id]/page";
 
-const CreateModule = () => {
+const CreateModule = ({
+  setSingleData,
+}: {
+  setSingleData: React.Dispatch<React.SetStateAction<courseArrayType | null>>;
+}) => {
   const params = useParams();
   const id = params.id as string;
 
   const state = useModalStore();
   const [loading, setLoading] = useState(false);
-
+  const [description, setDescription] = useState("");
   const isOpen = state.isOpen && state.type === "create-module";
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const target = e.target as HTMLFormElement;
     const formData = new FormData(target);
+    formData.append("description", description);
     if (id) {
       formData.append("subjectId", id);
     }
@@ -29,13 +36,24 @@ const CreateModule = () => {
         body: formData,
       }
     );
-
     const data = await res.json();
     if (data.status === 200) {
-      target.reset();
+      setSingleData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          modules: [...prev.modules, data.createModule],
+        };
+      }),
+        target.reset();
       state.setOpen(false, "create-module");
     }
     setLoading(false);
+  };
+  const handleDesc = (e: string) => {
+    setDescription(e);
   };
 
   return (
@@ -47,13 +65,13 @@ const CreateModule = () => {
         create module
       </div>
       {isOpen && (
-        <div className="w-full z-50 h-screen fixed left-0 top-0 bg-black/50 p-3 lg:p-16 motion-preset-expand duration-1000">
+        <div className="w-full z-50 inset-0 fixed p-3  bg-black/50   motion-preset-expand duration-1000">
           <motion.div
             initial={{ scale: 0.4, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.4, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-white min-h-full w-full rounded-3xl max-w-5xl mx-auto  p-4 flex flex-col gap-3"
+            className="bg-white rounded-3xl max-w-5xl mx-auto  p-4 grid self-start max-h-[90vh]"
           >
             <div className="justify-end flex">
               <X
@@ -63,59 +81,57 @@ const CreateModule = () => {
                 size={40}
               />
             </div>
-            <form onSubmit={handleSubmit} className="grid gap-y-7">
+            <form
+              onSubmit={handleSubmit}
+              className="grid gap-y-7    overflow-y-auto custom-scroll-bar pr-6 max-h-[70vh] h-full"
+            >
               <h1 className="text-center text-2xl font-medium capitalize">
                 create module
               </h1>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Enter module name"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+              <div className="grid gap-5 ">
+                <div className="grid gap-4 ">
+                  <div className="grid gap-y-2">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="Enter module name"
+                      className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
+                  <RichTextEditor
+                    handleDesc={handleDesc}
+                    content={description}
                   />
                 </div>
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    description
-                  </label>
-                  <input
-                    type="text"
-                    name="description"
-                    required
-                    placeholder="enter description"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
-                </div>
-
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    images
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    name="image"
-                    multiple
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
-                </div>
-                <div className="grid gap-y-2">
-                  <label htmlFor="" className="text-lg capitalize ">
-                    files
-                  </label>
-                  <input
-                    type="file"
-                    name="pdf"
-                    multiple
-                    accept="application/pdf"
-                    className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                  <div className="grid gap-y-2 w-full">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      images
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="image"
+                      multiple
+                      className="border w-full outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
+                  <div className="grid gap-y-2 w-full">
+                    <label htmlFor="" className="text-lg capitalize ">
+                      files
+                    </label>
+                    <input
+                      type="file"
+                      name="pdf"
+                      multiple
+                      accept="application/pdf"
+                      className="border outline-none w-full p-2 placeholder:text-gray-700 text-lg rounded-2xl"
+                    />
+                  </div>
                 </div>
               </div>
               <button

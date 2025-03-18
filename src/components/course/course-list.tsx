@@ -4,14 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Pdf, Subject } from "@prisma/client";
 import Loading from "../loading";
+import { useSubjectStore } from "@/providers/subject-array-provider";
 
-interface courseArrayType extends Subject {
+export interface courseArrayType extends Subject {
   pdf: Pdf[];
 }
 
 const CourseList = () => {
-  const [courseArray, setCourseArray] = useState<courseArrayType[]>([]);
+  // const [courseArray, setCourseArray] = useState<courseArrayType[]>([]);
   const [loading, setLoading] = useState(false);
+  const { courseArray, setCourseArray } = useSubjectStore((state) => state);
   useEffect(() => {
     const fetchCourseFunc = async () => {
       setLoading(true);

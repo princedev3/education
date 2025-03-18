@@ -3,17 +3,9 @@ import { Download } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-const ShowPdf = ({
-  item,
-  index,
-  key,
-}: {
-  item: string;
-  index: number;
-  key: string;
-}) => {
+const ShowPdf = ({ item, index }: { item: string; index: number }) => {
   return (
-    <ul key={key}>
+    <ul>
       <li className=" flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Image

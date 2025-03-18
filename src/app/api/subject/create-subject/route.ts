@@ -21,59 +21,63 @@ export const POST = async (req: NextRequest) => {
       if (typeof value === "string") {
         textArea[key] = value;
       } else if (value instanceof File) {
-        if (key === "image") {
+        if (key === "image" && value.size > 0) {
           imgFile.push(value);
         }
-        if (key === "pdf") {
+        if (key === "pdf" && value.size > 0) {
           pdfFile.push(value);
         }
       }
     });
 
-    const pdfArray: string[] = await Promise.all(
-      pdfFile.map(async (item) => {
-        return new Promise(async (resolve, rejects) => {
-          const bytes = Buffer.from(await item.arrayBuffer());
-          const stream = cloud.uploader.upload_stream(
-            { folder: "education" },
-            (error, result) => {
-              if (error) {
-                rejects(error);
-              } else {
-                resolve(result?.secure_url as string);
-              }
-            }
-          );
-          streamifier.createReadStream(bytes).pipe(stream);
-        });
-      })
-    );
+    const pdfArray: string[] = pdfFile.length
+      ? await Promise.all(
+          pdfFile.map(async (item) => {
+            return new Promise(async (resolve, rejects) => {
+              const bytes = Buffer.from(await item.arrayBuffer());
+              const stream = cloud.uploader.upload_stream(
+                { folder: "education" },
+                (error, result) => {
+                  if (error) {
+                    rejects(error);
+                  } else {
+                    resolve(result?.secure_url as string);
+                  }
+                }
+              );
+              streamifier.createReadStream(bytes).pipe(stream);
+            });
+          })
+        )
+      : [];
 
-    const images: string[] = await Promise.all(
-      imgFile.map(async (item) => {
-        return new Promise(async (resolve, rejects) => {
-          const bytes = Buffer.from(await item.arrayBuffer());
-          const stream = cloud.uploader.upload_stream(
-            { folder: "education" },
-            (error, result) => {
-              if (error) {
-                rejects(error);
-              } else {
-                resolve(result?.secure_url as string);
-              }
-            }
-          );
-          streamifier.createReadStream(bytes).pipe(stream);
-        });
-      })
-    );
+    const images: string[] = imgFile.length
+      ? await Promise.all(
+          imgFile.map(async (item) => {
+            return new Promise(async (resolve, rejects) => {
+              const bytes = Buffer.from(await item.arrayBuffer());
+              const stream = cloud.uploader.upload_stream(
+                { folder: "education" },
+                (error, result) => {
+                  if (error) {
+                    rejects(error);
+                  } else {
+                    resolve(result?.secure_url as string);
+                  }
+                }
+              );
+              streamifier.createReadStream(bytes).pipe(stream);
+            });
+          })
+        )
+      : [];
 
     const subjectCreate = await prisma.subject.create({
       data: {
         name: textArea.name,
         desc: textArea.desc,
         duration: `${textArea.duration} Weeks`,
-        coverImage: images[0],
+        coverImage: images.length ? images[0] : "/course.png",
         userId: session?.user?.id as string,
         images,
         pdf: {
@@ -83,7 +87,7 @@ export const POST = async (req: NextRequest) => {
         },
       },
     });
-    return NextResponse.json({ message: "subject created", status: 200 });
+    return NextResponse.json({ subjectCreate, status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json({

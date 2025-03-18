@@ -24,7 +24,7 @@ const Footer = () => {
                 alt="Logo"
                 width={40}
                 height={40}
-                className="object-contain w-10 h-10"
+                className="object-contain min-w-10 min-h-10"
               />
             </Link>
             <p className="text-gray-700 text-sm leading-relaxed">

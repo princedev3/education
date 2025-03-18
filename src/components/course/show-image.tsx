@@ -4,15 +4,7 @@ import Image from "next/image";
 import React from "react";
 import toast from "react-hot-toast";
 
-const ShowImage = ({
-  item,
-  index,
-  key,
-}: {
-  item: string;
-  index: number;
-  key: string;
-}) => {
+const ShowImage = ({ item, index }: { item: string; index: number }) => {
   const session = useUserStore((state) => state.session);
 
   const handleDownload = async (imageUrl: string, index: number) => {
@@ -34,7 +26,6 @@ const ShowImage = ({
     <>
       <Image
         onClick={() => handleDownload(item, index)}
-        key={key}
         src={item}
         alt=""
         width={200}

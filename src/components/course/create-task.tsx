@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Task } from "@prisma/client";
+import { useParams } from "next/navigation";
 type subjectArrayType = {
   id: string;
   name: string;
@@ -25,13 +26,14 @@ const CreateTask = ({
 }) => {
   const state = useModalStore();
   const [loading, setLoading] = useState(false);
-
+  const params = useParams();
+  const id = params.id as string;
   const [moduleArrayId, setModuleArrayId] = useState<subjectArrayType[]>([]);
   const isOpen = state.isOpen && state.type === "create-task";
   useEffect(() => {
     const fetchCourseFunc = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/module/module-route`,
+        `${process.env.NEXT_PUBLIC_FETCH_URL}/module/module-route/${id}`,
         {
           method: "GET",
         }
@@ -71,7 +73,7 @@ const CreateTask = ({
   return (
     <>
       <div
-        className="text-white bg-blue-600 px-3 py-2 text-sm lg:text-lg font-semibold rounded-2xl capitalize cursor-pointer"
+        className="text-white bg-blue-600 text-center px-3 py-2 text-sm lg:text-lg font-semibold rounded-2xl capitalize cursor-pointer"
         onClick={() => state.setOpen(true, "create-task")}
       >
         create task
@@ -134,12 +136,15 @@ const CreateTask = ({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Select Module</SelectLabel>
-                        {moduleArrayId.length &&
+                        {moduleArrayId.length ? (
                           moduleArrayId.map((item) => (
                             <SelectItem key={item.id} value={item.id}>
                               {item.name}{" "}
                             </SelectItem>
-                          ))}
+                          ))
+                        ) : (
+                          <span className="">firstly,create a module </span>
+                        )}
                       </SelectGroup>
                     </SelectContent>
                   </Select>

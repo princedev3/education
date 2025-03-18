@@ -4,11 +4,17 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 import MenuBar from "./menu-bar";
+import { useEffect, useState } from "react";
 interface textEditorProp {
   content: string;
   handleDesc: (conttent: string) => void;
 }
 const RichTextEditor = ({ content, handleDesc }: textEditorProp) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -43,6 +49,11 @@ const RichTextEditor = ({ content, handleDesc }: textEditorProp) => {
       handleDesc(editor.getHTML());
     },
   });
+
+  if (!isMounted || !editor) {
+    return null;
+  }
+
   return (
     <div className="">
       <MenuBar editor={editor} />

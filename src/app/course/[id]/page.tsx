@@ -1,6 +1,7 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
+import DOMPurify from "dompurify";
 import {
   Select,
   SelectContent,
@@ -34,7 +35,7 @@ interface moduleType extends Module {
   pdf: Pdf[];
 }
 
-interface courseArrayType extends Subject {
+export interface courseArrayType extends Subject {
   pdf: Pdf[];
   modules: moduleType[];
 }
@@ -48,7 +49,10 @@ const page = () => {
   const [submittingTaskId, setSubmittingTaskId] = useState<string | null>("");
   const [attempts, setAttempts] = useState<{ [key: string]: boolean }>({});
   const [singleData, setSingleData] = useState<courseArrayType | null>(null);
-  const memoizedCreateModule = useMemo(() => <CreateModule />, []);
+  const memoizedCreateModule = useMemo(
+    () => <CreateModule setSingleData={setSingleData} />,
+    [setSingleData]
+  );
   const memoizedCreateTask = useMemo(
     () => (
       <CreateTask
@@ -196,23 +200,30 @@ const page = () => {
 
   return (
     <div>
+      <div className="grid grid-flow-col my-4 gap-5">
+        {session?.user?.role === "ADMIN" && memoizedCreateModule}
+        {session?.user?.role === "ADMIN" && memoizedCreateTask}
+      </div>
       <div className="my-3">
-        <div className="grid grid-flow-col">
+        <div className=" ">
           <div className="grid gap-2">
-            <h1 className="text-3xl font-semibold">{singleData?.name}</h1>
-            <p className="text-lg text-gray-700">{singleData?.desc}</p>
+            <h1 className="text-3xl font-semibold capitalize">
+              {singleData?.name}
+            </h1>
+
+            <div
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(singleData?.desc as string),
+              }}
+            />
             <span className="text-lg text-gray-500">
               Duration: {singleData?.duration}
             </span>
           </div>
-          <div className="grid md:grid-flow-col gap-2 self-start justify-end">
-            {session?.user?.role === "ADMIN" && memoizedCreateModule}
-            {session?.user?.role === "ADMIN" && memoizedCreateTask}
-          </div>
         </div>
         <div className="flex flex-wrap gap-6 my-4 items-center">
           {singleData?.images?.map((item, index) => (
-            <ShowImage item={item} index={index} key={item} />
+            <ShowImage item={item} index={index} key={index} />
           ))}
         </div>
         <div className="grid gap-2">
@@ -232,9 +243,11 @@ const page = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="text-lg text-gray-700 mb-4">
-                {module.description}
-              </div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(module.description as string),
+                }}
+              />
               <div className="flex flex-wrap my-2 gap-6 items-center">
                 {module?.images?.map((img, idx) => (
                   <ShowImage item={img} index={idx} key={img} />
@@ -258,7 +271,7 @@ const page = () => {
                         className="flex gap-4 items-center"
                       >
                         <Select required name="useranswer">
-                          <SelectTrigger className="py-2 px-4 border rounded-md">
+                          <SelectTrigger className="py-2 px-4 border rounded-md w-[180px] ">
                             <SelectValue placeholder="Select an answer" />
                           </SelectTrigger>
                           <SelectContent>
@@ -276,7 +289,7 @@ const page = () => {
                         <button
                           disabled={isAttempted || submittingTaskId === task.id}
                           type="submit"
-                          className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-400"
+                          className="px-4 py-2 w-[120px] bg-blue-500 text-white rounded-md disabled:bg-gray-400"
                         >
                           {submittingTaskId === task.id ? (
                             <Loader size={25} className="animate-spin" />
