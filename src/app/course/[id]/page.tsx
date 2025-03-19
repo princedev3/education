@@ -26,7 +26,6 @@ import CreateModule from "@/components/course/create-module";
 import CreateTask from "@/components/course/create-task";
 import { useUserStore } from "@/providers/user-session";
 import { Loader } from "lucide-react";
-import { motion } from "framer-motion";
 import CrossIcon from "@/components/cross-icon";
 import CheckIcon from "@/components/check-icon";
 
@@ -194,6 +193,51 @@ const page = () => {
       });
     }
   }, [attempts]);
+
+  const handleReset = async (moduleId: string) => {
+    const userId = session?.user?.id;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FETCH_URL}/attempt-task?userId=${userId}&moduleId=${moduleId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (res.status === 200) {
+      setAttempts((prev) => {
+        const updatedAttempts = { ...prev };
+        singleData?.modules
+          .find((module) => module.id === moduleId)
+          ?.tasks.forEach((task) => {
+            delete updatedAttempts[task.id];
+          });
+        return updatedAttempts;
+      });
+
+      setSingleData((prev) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          modules: prev.modules.map((module) =>
+            module.id === moduleId
+              ? {
+                  ...module,
+                  tasks: module.tasks.map((task) => ({
+                    ...task,
+                    isCorrect: undefined,
+                  })),
+                }
+              : module
+          ),
+        };
+      });
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -248,18 +292,18 @@ const page = () => {
                   __html: DOMPurify.sanitize(module.description as string),
                 }}
               />
-              <div className="flex flex-wrap my-2 gap-6 items-center">
+              <div className="flex flex-wrap my-4 gap-6 items-center">
                 {module?.images?.map((img, idx) => (
                   <ShowImage item={img} index={idx} key={img} />
                 ))}
               </div>
-              <div className="grid gap-2 my-2">
+              <div className="grid gap-2 my-4">
                 {module?.pdf?.map((pdf, idx) => (
                   <ShowPdf key={pdf.id} item={pdf.url} index={idx} />
                 ))}
               </div>
-              <div className="flex flex-col gap-3">
-                {module?.tasks?.map((task) => {
+              <div className="flex flex-col gap-6">
+                {module?.tasks?.map((task, idx) => {
                   const isAttempted = attempts[task.id] !== undefined;
                   const isCorrect = attempts[task.id];
 
@@ -289,7 +333,7 @@ const page = () => {
                         <button
                           disabled={isAttempted || submittingTaskId === task.id}
                           type="submit"
-                          className="px-4 py-2 w-[120px] bg-blue-500 text-white rounded-md disabled:bg-gray-400"
+                          className="px-4 py-2 w-[120px] bg-blue-500 flex items-center justify-center text-white rounded-md disabled:bg-gray-400"
                         >
                           {submittingTaskId === task.id ? (
                             <Loader size={25} className="animate-spin" />
@@ -307,6 +351,17 @@ const page = () => {
                   );
                 })}
               </div>
+              {module.tasks.length > 0 &&
+                module.tasks.every(
+                  (task) => attempts[task.id] !== undefined
+                ) && (
+                  <button
+                    onClick={() => handleReset(module.id)}
+                    className="my-3 rounded-lg bg-blue-500  text-white p-3  cursor-pointer "
+                  >
+                    Want to retake task
+                  </button>
+                )}
             </AccordionContent>
           </AccordionItem>
         ))}

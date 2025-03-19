@@ -68,3 +68,39 @@ export const GET = async (req: NextRequest) => {
     });
   }
 };
+export const DELETE = async (req: NextRequest) => {
+  try {
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ message: "you have to login", status: 500 });
+    }
+
+    const searchParams = req.nextUrl.searchParams;
+    const userId = searchParams.get("userId");
+    const moduleId = searchParams.get("moduleId") as string;
+    if (!userId) {
+      return NextResponse.json({ message: "you have to login", status: 500 });
+    }
+
+    if (userId !== session?.user?.id) {
+      return NextResponse.json({ message: "you have to login", status: 500 });
+    }
+
+    const allAtempts = await prisma.taskAttempt.deleteMany({
+      where: {
+        userId,
+        task: {
+          moduleId,
+        },
+      },
+    });
+
+    return NextResponse.json({ message: "task reset", status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      message: "failed to fetch attempt",
+      status: 500,
+    });
+  }
+};

@@ -162,7 +162,7 @@ const CreateTask = ({
                       className="border outline-none p-2 placeholder:text-gray-700 text-lg rounded-2xl"
                     />
                     <span className="text-sm text-gray-500">
-                      seperate values with a ;
+                      seperate values with a ,
                     </span>
                   </div>
                 </div>
