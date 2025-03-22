@@ -26,8 +26,10 @@ export const POST = async (req: NextRequest) => {
       });
     }
     if (new Date() > existingVerifyToken?.expires) {
-      const newToken = await generateVerificationtokenbyemail(findUser.email);
-      await sendVerificationEmail(findUser.email, newToken.token);
+      const newToken = await generateVerificationtokenbyemail(
+        findUser?.email as string
+      );
+      await sendVerificationEmail(findUser.email as string, newToken.token);
       return NextResponse.json({
         message: "new token sent check email",
         status: 200,
@@ -39,7 +41,7 @@ export const POST = async (req: NextRequest) => {
       data: { emailVerified: new Date() },
     });
     await prisma.verificationToken.delete({
-      where: { token: body?.token },
+      where: { token: body?.token, id: existingVerifyToken.id },
     });
     return NextResponse.json({ message: "email verified", status: 200 });
   } catch (error) {

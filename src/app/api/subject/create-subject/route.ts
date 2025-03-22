@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloud } from "cloudinary";
 import streamifier from "streamifier";
 import prisma from "@/lib/prisma";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 cloud.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.api_key,

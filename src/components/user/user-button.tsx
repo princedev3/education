@@ -29,8 +29,8 @@ export const UserButton = () => {
         method: "POST",
       }
     );
-    const data = await res.json();
-    if (data.status === 200) {
+
+    if (res.ok) {
       router.push("/login");
       return;
     }

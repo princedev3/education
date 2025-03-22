@@ -24,35 +24,38 @@ export const POST = async (req: NextRequest) => {
     Array.from(formdata.entries()).forEach(([key, value]) => {
       if (typeof value === "string") {
         textArea[key] = value;
-      } else if (value instanceof File) {
+      } else if (value instanceof File && value.size > 0) {
         file.push(value);
       }
     });
+
     const existingUser = await findUserByEmail(textArea.email);
     if (existingUser) {
-      return NextResponse.json({ message: "can not create user", status: 500 });
+      return NextResponse.json({ message: "invalid credentials", status: 500 });
     }
 
     const hash = await bcrypt.hash(textArea.password, 10);
 
-    const buffer: string[] = await Promise.all(
-      file.map(async (item) => {
-        return new Promise(async (resolve, rejects) => {
-          const bytes = Buffer.from(await item.arrayBuffer());
-          const stream = cloud.uploader.upload_stream(
-            { folder: "education" },
-            (error, result) => {
-              if (error) {
-                rejects(error);
-              } else {
-                resolve(result?.secure_url as string);
-              }
-            }
-          );
-          streamifier.createReadStream(bytes).pipe(stream);
-        });
-      })
-    );
+    const buffer: string[] = file.length
+      ? await Promise.all(
+          file.map(async (item) => {
+            return new Promise(async (resolve, rejects) => {
+              const bytes = Buffer.from(await item.arrayBuffer());
+              const stream = cloud.uploader.upload_stream(
+                { folder: "education" },
+                (error, result) => {
+                  if (error) {
+                    rejects(error);
+                  } else {
+                    resolve(result?.secure_url as string);
+                  }
+                }
+              );
+              streamifier.createReadStream(bytes).pipe(stream);
+            });
+          })
+        )
+      : [];
 
     const { name, email } = textArea;
     if (!name || !email) {
@@ -66,7 +69,7 @@ export const POST = async (req: NextRequest) => {
         name,
         email,
         password: hash,
-        img: buffer[0],
+        image: buffer.length ? buffer[0] : "/avatar.png",
       },
     });
 

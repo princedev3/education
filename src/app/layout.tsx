@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/layout-wrapper";
 import { Toaster } from "react-hot-toast";
-import { auth } from "@/auth";
+import { auth } from "../lib/auth";
 import AuthProvider from "@/providers/auth-provider";
 import SessionProvider from "@/providers/session-provider";
 
@@ -28,6 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
     <html lang="en">
       <body>

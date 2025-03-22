@@ -12,6 +12,7 @@ const CreateSubject = () => {
   const [description, setDescription] = useState("");
   const state = useModalStore();
   const session = useUserStore((state) => state.session);
+
   const { courseArray, setCourseArray } = useSubjectStore((state) => state);
 
   const isOpen = state.isOpen && state.type === "create-course";
