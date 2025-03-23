@@ -31,8 +31,6 @@ const Login = async () => {
           const ress = await signIn("credentials", {
             email,
             password,
-            redirect: true,
-            redirectTo: "/",
           });
         }}
         className="flex flex-col gap-7"
