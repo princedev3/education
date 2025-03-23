@@ -1,4 +1,3 @@
-export const runtime = "nodejs";
 import prisma from "./prisma";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
