@@ -4,8 +4,6 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { v4 as uuid } from "uuid";
-import { encode as defaultEncode } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
 import { generateVerificationtokenbyemail } from "./some-actions/generateverificationtokenbtemail";
 import { sendVerificationEmail } from "./some-actions/mail";
@@ -14,7 +12,10 @@ import { NextResponse } from "next/server";
 const adapter = PrismaAdapter(prisma);
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
-    GoogleProvider,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     Credentials({
       credentials: {
         email: {},
@@ -50,6 +51,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  pages: {
+    error: "/error?error=auth_failed",
+  },
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
