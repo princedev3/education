@@ -7,9 +7,10 @@ import bcrypt from "bcryptjs";
 import { generateVerificationtokenbyemail } from "./some-actions/generateverificationtokenbtemail";
 import { sendVerificationEmail } from "./some-actions/mail";
 import { NextResponse } from "next/server";
+import type { Adapter } from "next-auth/adapters";
 
-const adapter = PrismaAdapter(prisma);
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
