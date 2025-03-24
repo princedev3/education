@@ -1,25 +1,46 @@
 "use client";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function CustomErrorPage() {
-  const { query } = useRouter();
-  const error = query.error as string | undefined;
+interface ErrorPageProps {
+  error: string;
+}
 
-  const errorMessages: Record<string, string> = {
-    Configuration: "Authentication configuration error.",
-    AccessDenied: "Access was denied. You may not have permission.",
-    Verification: "Verification failed. Please try again.",
-    default: "An unexpected error occurred. Please try again.",
-  };
+const ErrorPage = ({ error }: ErrorPageProps) => {
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }
+
+  // const errorMessage =
+  //   error instanceof Error ? (error.message as string) : error;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-bold text-red-500">Authentication Error</h1>
-      <p className="text-gray-700 mt-2">{errorMessages[error || "default"]}</p>
-      <Link href="/" className="mt-4 text-blue-500">
-        Go back to homepage
-      </Link>
+    <div>
+      <h1>invalid credentials</h1>
+      <p onClick={() => window.location.reload()}>login again</p>
     </div>
   );
-}
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { error } = query;
+
+  const errorMessage =
+    error instanceof Error ? error.message : error || "Unknown error occurred";
+
+  return {
+    props: {
+      error: errorMessage,
+    },
+  };
+};
+
+export default ErrorPage;

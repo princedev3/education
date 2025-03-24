@@ -13,27 +13,21 @@ import {
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { ChevronDown } from "lucide-react";
 import { useUserStore } from "@/providers/user-session";
+import { signOut } from "next-auth/react";
 
 export const UserButton = () => {
   const router = useRouter();
-
   const session = useUserStore((state) => state.session);
-
   const user = session?.user;
   const nameAbrev = user?.name?.split("").splice(0, 2).join("");
 
-  const signOut = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/user/logout-user`,
-      {
-        method: "POST",
-      }
-    );
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
 
-    if (res.ok) {
-      router.push("/login");
-      return;
-    }
+    document.cookie =
+      "authjs.session-token=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0";
+
+    router.push("/login");
   };
 
   if (session) {
@@ -48,7 +42,6 @@ export const UserButton = () => {
           >
             <span className="flex space-x-2">
               <Avatar className="size-8">
-                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
                 <AvatarFallback className="uppercase">
                   {nameAbrev}
                 </AvatarFallback>
@@ -69,7 +62,7 @@ export const UserButton = () => {
         <DropdownMenuContent className="mr-2">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={signOut}>Log Out</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>Log Out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     );

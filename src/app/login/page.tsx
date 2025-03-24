@@ -8,7 +8,6 @@ import ForgotPassword from "../forgot-password/page";
 
 const Login = async () => {
   const session = await auth();
-  console.log(session);
   if (session) {
     redirect("/");
   }
@@ -28,7 +27,7 @@ const Login = async () => {
           const email = formData.get("email");
           const password = formData.get("password");
 
-          const ress = await signIn("credentials", {
+          await signIn("credentials", {
             email,
             password,
           });

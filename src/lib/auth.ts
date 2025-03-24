@@ -147,7 +147,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   session: {
-    strategy: "jwt", // Use JWT sessions
+    strategy: "jwt",
   },
   cookies: {
     sessionToken: {
@@ -159,5 +159,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
     },
   },
-  debug: process.env.NODE_ENV === "development", // Enable debug mode in development
+  debug: process.env.NODE_ENV === "development",
 });
