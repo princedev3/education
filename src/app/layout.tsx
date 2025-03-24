@@ -35,14 +35,14 @@ export default async function RootLayout({
         <div
           className={`${geistSans.variable} ${geistMono.variable} antialiased w-full max-w-7xl mx-auto px-5 overflow-x-hidden`}
         >
-          {/* <AuthProvider>
-            <SessionProvider session={session}> */}
-          <LayoutWrapper>
-            {children}
-            <Toaster />
-          </LayoutWrapper>
-          {/* </SessionProvider>
-          </AuthProvider> */}
+          <AuthProvider>
+            <SessionProvider session={session}>
+              <LayoutWrapper>
+                {children}
+                <Toaster />
+              </LayoutWrapper>
+            </SessionProvider>
+          </AuthProvider>
         </div>
       </body>
     </html>
