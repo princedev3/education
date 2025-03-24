@@ -6,10 +6,10 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { generateVerificationtokenbyemail } from "./some-actions/generateverificationtokenbtemail";
 import { sendVerificationEmail } from "./some-actions/mail";
-import { NextResponse } from "next/server";
+import { Adapter } from "next-auth/adapters";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as unknown as Adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
