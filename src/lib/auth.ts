@@ -26,7 +26,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           // Check if email and password are provided
           if (!email || !password) {
-            throw new Error("Please provide email and password.");
+            return null;
           }
 
           const user = await prisma.user.findUnique({
@@ -36,7 +36,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           });
 
           if (!user) {
-            throw new Error("Invalid credentials: User not found.");
+            return null;
           }
 
           const isPasswordCorrect = await bcrypt.compare(
@@ -46,7 +46,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           if (!isPasswordCorrect) {
             console.log("Incorrect password for user:", email);
-            throw new Error("Invalid credentials: Incorrect password.");
+            return null;
           }
 
           if (!user.emailVerified) {
@@ -61,10 +61,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         } catch (error: unknown) {
           if (error instanceof Error) {
             console.error("Error in authorize callback:", error.message);
-            throw new Error(error.message);
+            return null;
           } else {
             console.error("Unexpected error:", error);
-            throw new Error("An unexpected error occurred.");
+            return null;
           }
         }
       },
