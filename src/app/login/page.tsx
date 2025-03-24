@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { auth, signIn } from "@/lib/auth";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import ForgotPassword from "../forgot-password/page";
+import ForgotPassword from "@/components/user/forgot-password";
 
 const Login = async () => {
   const session = await auth();
@@ -64,8 +64,8 @@ const Login = async () => {
                 name="password"
                 className="p-2 outline-none border w-full rounded-2xl text-gray-800"
               />
+              <ForgotPassword />
             </div>
-            {/* <ForgotPassword /> */}
           </div>
         </div>
 
@@ -81,8 +81,6 @@ const Login = async () => {
           </Link>
         </div>
       </form>
-      {/* <UserLogin /> */}
-
       <form
         action={async () => {
           "use server";

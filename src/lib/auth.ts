@@ -24,7 +24,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         try {
           const { email, password } = credentials;
 
-          // Check if email and password are provided
           if (!email || !password) {
             return null;
           }
@@ -107,6 +106,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               email: user.email as string,
               name: user.name || "New User",
               image: user.image as string,
+              role: "USER",
               password: "",
               accounts: {
                 create: {
