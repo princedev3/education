@@ -45,6 +45,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           );
 
           if (!isPasswordCorrect) {
+            console.log("Incorrect password for user:", email);
             throw new Error("Invalid credentials: Incorrect password.");
           }
 
