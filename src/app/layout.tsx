@@ -33,7 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <div
-          className={`${geistSans.variable} ${geistMono.variable} antialiased w-full max-w-7xl mx-auto px-5 overflow-x-hidden`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased w-full max-w-7xl mx-auto px-2 overflow-x-hidden`}
         >
           <AuthProvider>
             <SessionProvider session={session}>

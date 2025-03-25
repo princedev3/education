@@ -1,6 +1,6 @@
 "use client";
 import { useModalStore } from "@/lib/modal-toggle";
-import { LoaderCircle, X } from "lucide-react";
+import { Captions, CirclePlus, LoaderCircle, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -54,10 +54,10 @@ const CreateSubject = () => {
   return (
     <>
       <div
-        className="text-white bg-blue-600 px-3 py-2 text-lg font-semibold rounded-2xl capitalize cursor-pointer"
+        className="text-white bg-blue-600  flex items-center justify-center w-8 h-8  font-semibold rounded-full capitalize cursor-pointer"
         onClick={() => state.setOpen(true, "create-course")}
       >
-        create subject
+        <CirclePlus size={20} />
       </div>
       {isOpen && (
         <div className="w-full z-50 fixed inset-0 bg-black/50 p-3 flex items-center justify-center">

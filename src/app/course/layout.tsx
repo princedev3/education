@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from "react";
 import CreateSubject from "@/components/course/create-subject";
 import Link from "next/link";
+import { BookOpen, House } from "lucide-react";
 
 export default function CourseLayout({
   children,
@@ -20,8 +21,8 @@ export default function CourseLayout({
 
   const navigationLinks = useMemo(
     () => [
-      { href: "/course", label: "course" },
-      { href: "/", label: "home" },
+      { href: "/course", label: <BookOpen size={20} /> },
+      { href: "/", label: <House size={20} /> },
     ],
     []
   );
@@ -32,7 +33,7 @@ export default function CourseLayout({
         <Link
           key={link.href}
           href={link.href}
-          className="text-white bg-blue-600 px-3 py-2 text-lg font-semibold rounded-2xl capitalize cursor-pointer"
+          className="text-white bg-blue-600 w-8 flex items-center justify-center h-8 rounded-full text-lg font-semibold capitalize cursor-pointer"
         >
           {link.label}
         </Link>
@@ -56,7 +57,7 @@ export default function CourseLayout({
             materials and techniques.
           </p>
         </div>
-        <div className="absolute bottom-4 right-4 grid grid-flow-col gap-3 auto-cols-max z-10">
+        <div className="absolute bottom-4 right-4 grid grid-flow-col gap-3 auto-cols-max  items-center">
           {memoizedCreateSubject}
           {renderLinks()}
         </div>
