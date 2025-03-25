@@ -81,7 +81,7 @@ export default function Home() {
         animate={{ opacity: 1, x: 0 }}
         exit={{ scale: 0.4, opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="grid grid-cols-2 gap-5"
+        className="grid grid-cols-2 gap-5 self-start"
       >
         <div className=" h-[450px] my-auto grid gap-4">
           <div className="w-full h-full relative">

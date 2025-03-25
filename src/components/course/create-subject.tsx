@@ -39,6 +39,7 @@ const CreateSubject = () => {
       setLoading(false);
       setCourseArray([...courseArray, data.subjectCreate]);
       toast.success(data.message);
+      setDescription("");
       target.reset();
       state.setOpen(false, "create-course");
       return;

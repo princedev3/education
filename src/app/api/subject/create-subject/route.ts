@@ -17,6 +17,12 @@ export const POST = async (req: NextRequest) => {
     const imgFile: File[] = [];
     const pdfFile: File[] = [];
     const session = await auth();
+    if (session?.user?.role !== "ADMIN") {
+      return NextResponse.json({
+        message: "can not create subject",
+        status: 500,
+      });
+    }
     Array.from(formdata.entries()).forEach(([key, value]) => {
       if (typeof value === "string") {
         textArea[key] = value;
@@ -87,7 +93,11 @@ export const POST = async (req: NextRequest) => {
         },
       },
     });
-    return NextResponse.json({ subjectCreate, status: 200 });
+    return NextResponse.json({
+      subjectCreate,
+      status: 200,
+      message: "subject created",
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json({

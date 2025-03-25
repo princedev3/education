@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest) => {
     const imgFile: File[] = [];
     const pdfFile: File[] = [];
     const session = await auth();
-    if (!session) {
+    if (session?.user?.role !== "ADMIN") {
       return NextResponse.json({
         message: "can not create module",
         status: 500,

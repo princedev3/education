@@ -3,19 +3,24 @@ import { useModalStore } from "@/lib/modal-toggle";
 import { LoaderCircle, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import RichTextEditor from "../rich-text-editor";
-import { Module } from "@prisma/client";
+import { Module, Pdf, Task } from "@prisma/client";
 import { courseArrayType } from "@/app/course/[id]/page";
 
+interface moduleType extends Module {
+  tasks: Task[];
+  pdf: Pdf[];
+}
+
 const CreateModule = ({
-  setSingleData,
+  setCourseModule,
 }: {
-  setSingleData: React.Dispatch<React.SetStateAction<courseArrayType | null>>;
+  setCourseModule: React.Dispatch<React.SetStateAction<moduleType[]>>;
 }) => {
   const params = useParams();
   const id = params.id as string;
-
+  const router = useRouter();
   const state = useModalStore();
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
@@ -37,17 +42,11 @@ const CreateModule = ({
       }
     );
     const data = await res.json();
+
     if (data.status === 200) {
-      setSingleData((prev) => {
-        if (!prev) {
-          return prev;
-        }
-        return {
-          ...prev,
-          modules: [...prev.modules, data.createModule],
-        };
-      }),
-        target.reset();
+      setCourseModule((prev) => [...prev, data.createModule]);
+      target.reset();
+      setDescription("");
       state.setOpen(false, "create-module");
     }
     setLoading(false);
